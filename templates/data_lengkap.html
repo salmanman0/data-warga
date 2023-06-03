@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RW 0{{rw}} - Limbungan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+</head>
+<style>
+    .heading {
+        width: 100%;
+        height: 250px;
+        background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://portal.beltim.go.id/wp-content/uploads/2021/05/penduduk-01.png');
+        background-position: center;
+        background-size: cover;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .heading>h1 {
+        font-size: 30px;
+        text-align: center;
+        margin: auto auto auto auto;
+    }
+    .heading>button {
+        width: 200px;
+        height: 30px;
+        background-color: transparent;
+        color: white;
+        border-radius: 50px;
+        border: 1px solid white;
+        margin: auto auto auto auto;
+    }
+
+    .heading>button:hover {
+        border: 2px solid white;
+    }
+
+    .mypost {
+        width: 100%;
+        max-width: 800px;
+        margin: 20px auto 0px auto;
+        padding: 20px;
+        box-shadow: 0px 0px 3px 0px gray;
+        display: none;
+    }
+    .mycards {
+        margin: 20px auto 0px auto;
+        width: 95%;
+        max-width: 1200px;
+    }
+    .card:hover {
+        border: 2px solid grey;
+    }
+    .card-body>img {
+        width: 70px;
+        height: 70px;
+        border-radius: 70px;
+        margin-bottom: 20px;
+    }
+    .total-warga{
+        width: 200px;
+        height: 50px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 25px;
+        margin-left: auto;
+        margin-right: 50px;
+        color: grey
+    }
+    .btn-input{
+        margin-right: auto;
+        margin-left: 50px;
+    }
+</style>
+<script>
+    $(document).ready(function() {
+        listing();
+    });
+    var totalWarga = `null`
+    function listing() {
+        $.ajax({
+            type: 'GET',
+            url: '/warga',
+            data: {},
+            success: function (response) {
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let rows = response['warga']
+                for (let i = 0; i < rows.length; i++) {
+                    if(rows[i]['rw'] == {{rw}}){
+                        let nama = rows[i]['nama']
+                        let kepala = rows[i]['kepala']
+                        let nik = rows[i]['nik']
+                        let noKK = rows[i]['noKK']
+                        let jk = rows[i]['jk']
+                        let pekerjaan = rows[i]['pekerjaan']
+                        let pendidikan = rows[i]['pendidikan']
+                        let rw = rows[i]['rw']
+                        let rt = rows[i]['rt']
+                        let lahir = rows[i]['tgl_lahir']
+                        let tempat = rows[i]['tmpt_lahir']
+                        let temp_html = `<div class="col">
+                            <div class="card h-100">
+                                <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                    class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title"">${nama}</h5>
+                                    <p class="card-text" ">${nik}</p>
+                                    <hr>
+                                    <ul style="color:grey">
+                                        <li>Kepala : ${kepala}</li>
+                                        <li>Nomor KK : ${noKK}</li>
+                                        <hr>
+                                        <li>Tempat Lahir : ${tempat}</li>
+                                        <li>Tanggal Lahir : ${lahir}</li>
+                                        <li>Jenis Kelamin : ${jk}</li>
+                                        <li>Pendidikan : ${pendidikan}</li>
+                                        <li>Pekerjaan : ${pekerjaan}</li>
+                                        <li>RT : ${rt}</li>
+                                    </ul>
+                                    <div align="right" style="margin-top:auto; ">
+                                        <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                        <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                    totalWarga = `<p style="margin: auto;">Total Warga : ${i+1}</p> `
+                    $('#cards-box').prepend(temp_html)
+                    }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+
+    function open_box() {
+        $('#post-box').show()
+    }
+    function close_box() {
+        $('#post-box').hide()
+        $('#data-box').hide()
+        $('.last').hide()
+    }
+    function box_nanik(){
+        $('#nanik-search').show()
+        $('#main-search').hide()
+        $('#kepala-search').hide()
+        $('#noKK-search').hide()
+        $('#tmpt-search').hide()
+        $('#tgl-search').hide()
+        $('#pendidikan-search').hide()
+        $('#pekerjaan-search').hide()
+        $('#rt-search').hide()
+    }
+    function box_kepala(){
+        $('#nanik-search').hide()
+        $('#main-search').hide()
+        $('#kepala-search').show()
+        $('#noKK-search').hide()
+        $('#tmpt-search').hide()
+        $('#tgl-search').hide()
+        $('#pendidikan-search').hide()
+        $('#pekerjaan-search').hide()
+        $('#rt-search').hide()
+    }
+    function box_noKK(){
+        $('#nanik-search').hide()
+        $('#main-search').hide()
+        $('#kepala-search').hide()
+        $('#noKK-search').show()
+        $('#tmpt-search').hide()
+        $('#tgl-search').hide()
+        $('#pendidikan-search').hide()
+        $('#pekerjaan-search').hide()
+        $('#rt-search').hide()
+    }
+    function box_tmpt(){
+        $('#nanik-search').hide()
+        $('#main-search').hide()
+        $('#kepala-search').hide()
+        $('#noKK-search').hide()
+        $('#tmpt-search').show()
+        $('#tgl-search').hide()
+        $('#pendidikan-search').hide()
+        $('#pekerjaan-search').hide()
+        $('#rt-search').hide()
+    }
+    function box_tgl(){
+        $('#nanik-search').hide()
+        $('#main-search').hide()
+        $('#kepala-search').hide()
+        $('#noKK-search').hide()
+        $('#tmpt-search').hide()
+        $('#tgl-search').show()
+        $('#pendidikan-search').hide()
+        $('#pekerjaan-search').hide()
+        $('#rt-search').hide()
+    }
+    function box_pendidikan(){
+        $('#nanik-search').hide()
+        $('#main-search').hide()
+        $('#kepala-search').hide()
+        $('#noKK-search').hide()
+        $('#tmpt-search').hide()
+        $('#tgl-search').hide()
+        $('#pendidikan-search').show()
+        $('#pekerjaan-search').hide()
+        $('#rt-search').hide()
+    }
+    function box_pekerjaan(){
+        $('#nanik-search').hide()
+        $('#main-search').hide()
+        $('#kepala-search').hide()
+        $('#noKK-search').hide()
+        $('#tmpt-search').hide()
+        $('#tgl-search').hide()
+        $('#pendidikan-search').hide()
+        $('#pekerjaan-search').show()
+        $('#rt-search').hide()
+    }
+    function box_rt(){
+        $('#nanik-search').hide()
+        $('#main-search').hide()
+        $('#kepala-search').hide()
+        $('#noKK-search').hide()
+        $('#tmpt-search').hide()
+        $('#tgl-search').hide()
+        $('#pendidikan-search').hide()
+        $('#pekerjaan-search').hide()
+        $('#rt-search').show()
+    }
+    function search_nama_nik(){
+        $.ajax({
+            type: 'GET',
+            url: '/warga',
+            data: {},
+            success: function (response) {
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let rows = response['warga']
+                let value = $('#search').val()
+                let count_warga = 0;
+                if(value != ""){
+                    for (let i = 0; i < rows.length; i++) {
+                        if(rows[i]['rw'] == {{rw}} && rows[i]['nama'] == value){
+                            let nama = rows[i]['nama']
+                            let kepala = rows[i]['kepala']
+                            let nik = rows[i]['nik']
+                            let noKK = rows[i]['noKK']
+                            let jk = rows[i]['jk']
+                            let pekerjaan = rows[i]['pekerjaan']
+                            let pendidikan = rows[i]['pendidikan']
+                            let rw = rows[i]['rw']
+                            let rt = rows[i]['rt']
+                            let lahir = rows[i]['tgl_lahir']
+                            let tempat = rows[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                        else if(rows[i]['rw'] == {{rw}} && rows[i]['nik'] == value){
+                            let nama = rows[i]['nama']
+                            let kepala = rows[i]['kepala']
+                            let nik = rows[i]['nik']
+                            let noKK = rows[i]['noKK']
+                            let jk = rows[i]['jk']
+                            let pekerjaan = rows[i]['pekerjaan']
+                            let pendidikan = rows[i]['pendidikan']
+                            let rw = rows[i]['rw']
+                            let rt = rows[i]['rt']
+                            let lahir = rows[i]['tgl_lahir']
+                            let tempat = rows[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px"onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'"  >Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                            totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < rows.length; i++) {
+                            let nama = rows[i]['nama']
+                            let kepala = rows[i]['kepala']
+                            let nik = rows[i]['nik']
+                            let noKK = rows[i]['noKK']
+                            let jk = rows[i]['jk']
+                            let pekerjaan = rows[i]['pekerjaan']
+                            let pendidikan = rows[i]['pendidikan']
+                            let rw = rows[i]['rw']
+                            let rt = rows[i]['rt']
+                            let lahir = rows[i]['tgl_lahir']
+                            let tempat = rows[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+    function search_kepala(){
+        $.ajax({
+            type: "GET",
+            url: "/warga",
+            data:{},
+            success: function(response){
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let data = response['warga']
+                let kepala = $('#search-kep').val()
+                let count_warga = 0
+                if(kepala != ""){
+                    for(let i = 0 ; i < data.length ; i++){
+                        if(data[i]['rw'] == {{rw}} && data[i]['kepala'] == kepala){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                            totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                            $('#cards-box').prepend(temp_html)
+                        }
+                    }
+                }
+                else {
+                    for(let i = 0 ; i < data.length ; i++){
+                        let nama = data[i]['nama']
+                        let kepala = data[i]['kepala']
+                        let nik = data[i]['nik']
+                        let noKK = data[i]['noKK']
+                        let jk = data[i]['jk']
+                        let pekerjaan = data[i]['pekerjaan']
+                        let pendidikan = data[i]['pendidikan']
+                        let rw = data[i]['rw']
+                        let rt = data[i]['rt']
+                        let lahir = data[i]['tgl_lahir']
+                        let tempat = data[i]['tmpt_lahir']
+                        let temp_html = `<div class="col">
+                            <div class="card h-100">
+                                <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                    class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title"">${nama}</h5>
+                                    <p class="card-text" ">${nik}</p>
+                                    <hr>
+                                    <ul style="color:grey">
+                                        <li>Kepala : ${kepala}</li>
+                                        <li>Nomor KK : ${noKK}</li>
+                                        <hr>
+                                        <li>Tempat Lahir : ${tempat}</li>
+                                        <li>Tanggal Lahir : ${lahir}</li>
+                                        <li>Jenis Kelamin : ${jk}</li>
+                                        <li>Pendidikan : ${pendidikan}</li>
+                                        <li>Pekerjaan : ${pekerjaan}</li>
+                                        <li>RT : ${rt}</li>
+                                    </ul>
+                                    <div align="right" style="margin-top:auto; ">
+                                        <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                        <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                        count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                    }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+    function search_noKK(){
+        $.ajax({
+            type: "GET",
+            url: "/warga",
+            data:{},
+            success: function(response){
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let data = response['warga']
+                let noKK = $('#search-kk').val()
+                let count_warga = 0
+                if(noKK != ""){
+                    for(let i = 0 ; i < data.length ; i++){
+                        if(data[i]['rw'] == {{rw}} && data[i]['noKK'] == noKK){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px"onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'" >Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                    }
+                }
+                else {
+                    for(let i = 0 ; i < data.length ; i++){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        
+                    }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+    function search_tmpt(){
+        $.ajax({
+            type: "GET",
+            url: "/warga",
+            data:{},
+            success: function(response){
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let data = response['warga']
+                let tmpt = $('#search-tmpt').val()
+                let count_warga = 0
+                if(tmpt != ""){
+                    for(let i = 0 ; i < data.length ; i++){
+                        if(data[i]['rw'] == {{rw}} && data[i]['tmpt_lahir'] == tmpt){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                             <button class="btn btn-danger" style="width:100px"value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                    }
+                }
+                else {
+                    for(let i = 0 ; i < data.length ; i++){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        
+                    }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+    function search_date(){
+        $.ajax({
+            type: "GET",
+            url: "/warga",
+            data:{},
+            success: function(response){
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let data = response['warga']
+                let date = $('#search-date').val()
+                let count_warga = 0
+                if(date != ""){
+                    for(let i = 0 ; i < data.length ; i++){
+                        if(data[i]['rw'] == {{rw}} && data[i]['tgl_lahir'] == date){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                    }
+                }
+                else {
+                    for(let i = 0 ; i < data.length ; i++){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        
+                    }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+    function search_pendidikan(){
+        $.ajax({
+            type: "GET",
+            url: "/warga",
+            data:{},
+            success: function(response){
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let data = response['warga']
+                let pendidikan = $('#search-pendidikan').val()
+                let count_warga = 0
+                if(pendidikan != ""){
+                    for(let i = 0 ; i < data.length ; i++){
+                        if(data[i]['rw'] == {{rw}} && data[i]['pendidikan'] == pendidikan){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                    }
+                }
+                else {
+                    for(let i = 0 ; i < data.length ; i++){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                        class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        
+                    }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+    function search_pekerjaan(){
+        $.ajax({
+            type: "GET",
+            url: "/warga",
+            data:{},
+            success: function(response){
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let data = response['warga']
+                let pekerjaan = $('#search-pekerjaan').val()
+                let count_warga = 0
+                if(pekerjaan != ""){
+                    for(let i = 0 ; i < data.length ; i++){
+                        if(data[i]['rw'] == {{rw}} && data[i]['pekerjaan'] == pekerjaan){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                    }
+                }
+                else {
+                    for(let i = 0 ; i < data.length ; i++){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        
+                    }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+    function search_rt(){
+        $.ajax({
+            type: "GET",
+            url: "/warga",
+            data:{},
+            success: function(response){
+                $('#cards-box').empty()
+                $('#totalWarga').empty()
+                let data = response['warga']
+                let rt = $('#search-rt').val()
+                let count_warga = 0
+                if(rt != ""){
+                    for(let i = 0 ; i < data.length ; i++){
+                        if(data[i]['rw'] == {{rw}} && data[i]['rt'] == rt){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        }
+                    }
+                }
+                else {
+                    for(let i = 0 ; i < data.length ; i++){
+                            let nama = data[i]['nama']
+                            let kepala = data[i]['kepala']
+                            let nik = data[i]['nik']
+                            let noKK = data[i]['noKK']
+                            let jk = data[i]['jk']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let pendidikan = data[i]['pendidikan']
+                            let rw = data[i]['rw']
+                            let rt = data[i]['rt']
+                            let lahir = data[i]['tgl_lahir']
+                            let tempat = data[i]['tmpt_lahir']
+                            let temp_html = `<div class="col">
+                                <div class="card h-100" >
+                                    <img src="https://pinhome-blog-assets-public.s3.ap-southeast-1.amazonaws.com/2017/11/logo-riau.jpg"
+                                         class="card-img-top">
+                                    <div class="card-body">
+                                        <h5 class="card-title"">${nama}</h5>
+                                        <p class="card-text" ">${nik}</p>
+                                        <hr>
+                                        <ul style="color:grey">
+                                            <li>Kepala : ${kepala}</li>
+                                            <li>Nomor KK : ${noKK}</li>
+                                            <hr>
+                                            <li>Tempat Lahir : ${tempat}</li>
+                                            <li>Tanggal Lahir : ${lahir}</li>
+                                            <li>Jenis Kelamin : ${jk}</li>
+                                            <li>Pendidikan : ${pendidikan}</li>
+                                            <li>Pekerjaan : ${pekerjaan}</li>
+                                            <li>RT : ${rt}</li>
+                                        </ul>
+                                        <div align="right" style="margin-top:auto; ">
+                                            <button class="btn btn-warning" style="width:100px" onclick="window.location.href='/edit-anggota/${rt}-${nama}-${nik}'">Edit</button>
+                                            <button class="btn btn-danger" style="width:100px" value=${nik} id="hapus_akun" onclick="hapus_akun(${nik})">Hapus</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`
+                            count_warga = count_warga + 1
+                        totalWarga = `<p style="margin: auto;">Total Warga : ${count_warga}</p> `
+                        $('#cards-box').prepend(temp_html)
+                        
+                    }
+                }
+                $('#totalWarga').append(totalWarga)
+            }
+        })
+    }
+
+    function hapus_akun(nik){
+        $.ajax({
+            type: "POST",
+            url: '/delete/akun',
+            data: {nik_give : nik},
+            success : function(response){
+                alert(response['msg'])
+                window.location.reload()
+            }
+        })
+    }
+</script>
+
+<body>
+    <div class="heading">
+        <h1 style="font-weight:600"><span style="color: red; ">Data</span> Warga RW 0{{rw}} <br>KELURAHAN <span style="color: red;">LIMBUNGAN</span>
+        </h1>
+        <button style="font-weight:600"onclick="window.location.href='/input/tambah'">INPUT WARGA</button>
+        <button style="font-weight:600"onclick="window.location.href='/'">Home</button>
+    </div>
+    <div class="total-warga"id="totalWarga">
+        <p style="margin: auto;">Total Warga : </p> 
+    </div>
+    
+    <div class="mycards">
+        <!-- Main Search -->
+        <div id="main-search" style="display: inline;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Filter Pencarian
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="box_nanik()">Nama atau NIK</a></li>
+                    <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                    <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                    <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                    <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                    <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                </ul>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="search" placeholder="Cari Nama Atau NIK Warga" aria-label="Cari Nama Atau NIK Warga" aria-describedby="button-addon2">
+                <button class="btn btn-warning" onclick="search_nama_nik()">Cari</button>
+            </div>
+        </div>
+        <!-- Nama dan NIK Search -->
+        <div id="nanik-search" style="display: none;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Nama dan NIK
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="box_nanik()">Nama atau NIK</a></li>
+                    <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                    <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                    <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                    <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                    <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                </ul>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="search" placeholder="Cari Nama Atau NIK Warga" aria-label="Cari Nama Atau NIK Warga" aria-describedby="button-addon2">
+                <button class="btn btn-warning" onclick="search_nama_nik()">Cari</button>
+            </div>
+        </div>
+        <!-- Kepala Search -->
+        <div id="kepala-search"style="display: none;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Kepala Keluarga
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="box_nanik()">Nama atau NIK</a></li>
+                    <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                    <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                    <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                    <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                    <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                </ul>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="search-kep" placeholder="Cari Kepala Keluarga" aria-label="Cari Kepala Keluarga" aria-describedby="button-addon2">
+                <button class="btn btn-warning" onclick="search_kepala()">Cari</button>
+                
+            </div>
+        </div>
+        <!-- Nomor KK Search -->
+        <div id="noKK-search"style="display: none;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Nomor KK
+                </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                        <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                        <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                        <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                        <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                        <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                        <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                    </ul>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="search-kk" placeholder="Cari Nomor Kartu Keluarga" aria-label="Cari Nomor Kartu Keluarga" aria-describedby="button-addon2">
+                <button class="btn btn-warning" onclick="search_noKK()">Cari</button>
+            </div>
+        </div>
+        <!-- Tempat Lahir Search -->
+        <div id="tmpt-search"style="display: none;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Tempat Lahir
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="box_nanik()">Nama atau NIK</a></li>
+                    <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                    <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                    <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                    <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                    <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                </ul>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="search-tmpt" placeholder="Cari Tempat Lahir" aria-label="Cari Tempat Lahir" aria-describedby="button-addon2">
+                <button class="btn btn-warning" onclick="search_tmpt()">Cari</button>
+            </div>
+        </div>
+        <!-- Tanggal Lahir Search -->
+        <div id="tgl-search"style="display: none;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Tanggal Lahir
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="box_nanik()">Nama atau NIK</a></li>
+                    <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                    <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                    <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                    <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                    <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                </ul>
+            </div>
+            <div class="input-group mb-3">
+                <input type="date" class="form-control" id="search-date" placeholder="Cari Tanggal Lahir" aria-label="Cari Tanggal Lahir" aria-describedby="button-addon2">
+                <button class="btn btn-warning" onclick="search_date()">Cari</button>
+            </div>
+        </div>
+        <!-- Pendidikan Search -->
+        <div id="pendidikan-search" style="display: none;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Pendidikan
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="box_nanik()">Nama atau NIK</a></li>
+                    <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                    <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                    <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                    <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                    <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                </ul>
+            </div>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="search-pendidikan" placeholder="Cari Pendidikan Warga" aria-label="Cari Pendidikan Warga" aria-describedby="button-addon2">
+                <button class="btn btn-warning" onclick="search_pendidikan()">Cari</button>
+            </div>
+        </div>
+        <!-- Pekerjaan Search -->
+        <div id="pekerjaan-search" style="display: none;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Pekerjaan
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="box_nanik()">Nama atau NIK</a></li>
+                    <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                    <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                    <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                    <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                    <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                </ul>
+        </div> 
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="search-pekerjaan" placeholder="Cari Pekerjaan Warga" aria-label="Cari Pekerjaan Warga" aria-describedby="button-addon2">
+            <button class="btn btn-warning" onclick="search_pekerjaan()">Cari</button>
+        </div>
+        </div>
+        <!-- rt Search -->
+        <div id="rt-search"style="display: none;">
+            <div class="dropdown mb-3" align="right">
+                <button class="btn btn-warning dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                RT
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="box_nanik()">Nama atau NIK</a></li>
+                    <li><a class="dropdown-item" onclick="box_kepala()">Kepala Keluarga</a></li>
+                    <li><a class="dropdown-item" onclick="box_noKK()">Nomor KK</a></li>
+                    <li><a class="dropdown-item" onclick="box_tmpt()">Tempat Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_tgl()">Tanggal Lahir</a></li>
+                    <li><a class="dropdown-item" onclick="box_pendidikan()">Pendidikan</a></li>
+                    <li><a class="dropdown-item" onclick="box_pekerjaan()">Pekerjaan</a></li>
+                    <li><a class="dropdown-item" onclick="box_rt()">RT</a></li>
+                </ul>
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="search-rt" placeholder="Cari Rukun Tetangga" aria-label="Cari Rukun Tetangga" aria-describedby="button-addon2">
+            <button class="btn btn-warning"onclick="search_rt()">Cari</button>
+        </div>
+        </div>
+        
+        <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box">
+            
+        </div>
+    </div>
+</body>
+
+</html>

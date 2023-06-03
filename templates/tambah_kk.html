@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  
+  <title>Tambah Warga | Limbungan</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="icon" href="../static/images/logo-pekanbaru.png">
+
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" href="../static/css/fontawesome.css">
+  <link rel="stylesheet" href="../static/css/templatemo-woox-travel.css">
+  <link rel="stylesheet" href="../static/css/owl.css">
+  <link rel="stylesheet" href="../static/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <!--
+
+TemplateMo 580 Woox Travel
+
+https://templatemo.com/tm-580-woox-travel
+
+-->
+  <style>
+    .lambang {
+      background-image: url("../static/images/logo-pekanbaru.png");
+      background-position: center;
+      background-size: 100px;
+      width: 50px;
+      height: 60px;
+      margin-top: 5px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mycards {
+      margin: 20px auto 0px auto;
+      width: 95%;
+      max-width: 1200px;
+    }
+    .mycards>#mycard{
+      display: flex;
+      flex-direction: column;
+      justify-content: right;
+    }
+    .mycards>#mycard>.search{
+      width: 300px;
+      margin-left: auto;
+      margin-bottom: 10px;
+    }
+    .mybtns {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0px;
+  }
+
+  .mybtns>button {
+      margin-right: 10px;
+  }
+  .mybtns>a{
+    width: 100%;
+    border-radius: 50px;
+    height: 45px;
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+  .anybutton{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    height: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  </style>
+  <script>
+    let a = 0
+    let length_db = 0
+    $(document).ready(function(){
+      listing()
+    })
+    var rt_max = 0
+    function listing(){
+            $('#mycard').empty()
+            $('#cards-box').empty()
+            $('#button-rt').empty()
+        $.ajax({
+            type: 'GET',
+            url: '/api/kk',
+            data: {},
+            success: function (response) {  
+                a = 0
+                let rt = ""
+                let rows = response['kartu_keluarga']
+                length_db = rows.length
+                for (let i = 0; i < rows.length; i++) {
+                    let kepala = rows[i]['kepala']
+                    let noKK = rows[i]['nomorKK']
+                    let rw = rows[i]['rw']
+                    rt = rows[i]['rt']
+                    let rt_conv = Number(rt)
+                    if(rt_conv > rt_max){
+                      rt_max = rt_conv
+                    }
+                    if({{rw}} == rw){
+                      let temp_html = `
+                      <div class="col" >
+                        <div class="card h-100" style="width:100%">
+                          <div class="card-body" onclick="window.location.href = '/tambah-anggota/${rt}-${kepala}-${noKK}'">
+                            <p>Kartu Keluarga</p>
+                            <h5  align="center"class="card-title">${kepala}</h5>
+                            <p align="center" class="card-text">${noKK}</p>
+                          </div>
+                          
+                          <button class="btn btn-danger" id="nomor_kk${i+1}" value=${noKK} onclick="hapus_akun(${noKK})">Hapus</button>
+                        </div>
+                      </div>`
+                      $('#cards-box').prepend(temp_html)
+                      a++
+                    }
+                }
+                for (let k = 1 ; k <= rt_max; k++){
+                  let button_html = 
+                      `
+                      <div class="mybtns" style="width: 30%;">
+                        <button class="btn btn-warning" style="width: 85%;" onclick="getRT${k}()">RT 0${k}</button>
+                      </div>
+                      `
+                  $('#button-rt').append(button_html)
+                }
+                let countWarga = `<p align="right" style="margin-bottom: 15px;">Total Kartu Keluarga : ${a}</p> 
+                <div class="input-group mb-3 search">
+                  <input type="text" class="form-control" id="search-box" placeholder="Nomor Kartu Keluarga" aria-label="Recipient's username" aria-describedby="button-addon2">
+                  <button class="btn btn-outline-secondary" onclick="search()" type="button" id="search-button">Cari</button>
+                </div>`
+              $('#mycard').prepend(countWarga)
+            }
+        })
+    }
+    
+    function getRT1(){
+        $('#mycard').empty()
+        $('#cards-box').empty()
+        $.ajax({
+            type: 'GET',
+            url: '/api/kk',
+            data: {},
+            success: function (response) {  
+                a = 0
+                let rows = response['kartu_keluarga']
+                for (let i = 0; i < rows.length; i++) {
+                    let kepala = rows[i]['kepala']
+                    let noKK = rows[i]['nomorKK']
+                    let rw = rows[i]['rw']
+                    let rt = rows[i]['rt']
+                    let rt_conv = Number(rt)
+                    console.log(rt_conv)
+                    if({{rw}}== rw && rt_conv == 1){
+                        let temp_html = `
+                        <div class="col" >
+                          <div class="card h-100" style="width:1";">
+                            <div class="card-body" onclick="window.location.href = '/tambah-anggota/${rt}-${kepala}-${noKK}'">
+                              <p>Kartu Keluarga</p>
+                              <h5  align="center"class="card-title">${kepala}</h5>
+                              <p align="center" class="card-text">${noKK}</p>
+                            </div>
+                            
+                              <button class="btn btn-danger" onclick="hapus_akun(${noKK})">Hapus</button>
+                          </div>
+                        </div>`
+                        $('#cards-box').prepend(temp_html)
+                        a++
+                    
+                  }
+                }
+                let countWarga = `<p align="right" style="margin-bottom: 15px;">Total Kartu Keluarga : ${a}</p>`
+                      $('#mycard').prepend(countWarga)
+            }
+        })
+      }
+      function getRT2(){
+            $('#mycard').empty()
+            $('#cards-box').empty()
+          $.ajax({
+              type: 'GET',
+              url: '/api/kk',
+              data: {},
+              success: function (response) {  
+                a = 0
+                  let rows = response['kartu_keluarga']
+                  for (let i = 0; i < rows.length; i++) {
+                      let kepala = rows[i]['kepala']
+                      let noKK = rows[i]['nomorKK']
+                      let rw = rows[i]['rw']
+                      let rt = rows[i]['rt']
+                      if({{rw}}== rw && rt == '2'){
+                        let temp_html = `
+                        <div class="col" >
+                          <div class="card h-100" style="width:1";">
+                            <div class="card-body" onclick="window.location.href = '/tambah-anggota/${rt}-${kepala}-${noKK}'">
+                              <p>Kartu Keluarga</p>
+                              <h5  align="center"class="card-title">${kepala}</h5>
+                              <p align="center" class="card-text">${noKK}</p>
+                            </div>
+                            
+                              <button class="btn btn-danger" onclick="hapus_akun(${noKK})">Hapus</button>
+                          </div>
+                        </div>`
+                        $('#cards-box').prepend(temp_html)
+                        a++
+                      }
+                  }
+                  let countWarga = `<p align="right" style="margin-bottom: 15px;">Total Kartu Keluarga : ${a}</p>`
+                      $('#mycard').prepend(countWarga)
+              }
+          })
+        }
+        function getRT3(){
+            $('#mycard').empty()
+            $('#cards-box').empty()
+            $.ajax({
+                type: 'GET',
+                url: '/api/kk',
+                data: {},
+                success: function (response) {  
+                  a = 0
+                    let rows = response['kartu_keluarga']
+                    for (let i = 0; i < rows.length; i++) {
+                        let kepala = rows[i]['kepala']
+                        let noKK = rows[i]['nomorKK']
+                        let rw = rows[i]['rw']
+                        let rt = rows[i]['rt']
+                        if({{rw}}== rw && rt == '3'){
+                          let temp_html = `
+                          <div class="col" >
+                            <div class="card h-100" style="width:1";">
+                              <div class="card-body" onclick="window.location.href = '/tambah-anggota/${rt}-${kepala}-${noKK}'">
+                                <p>Kartu Keluarga</p>
+                                <h5  align="center"class="card-title">${kepala}</h5>
+                                <p align="center" class="card-text">${noKK}</p>
+                              </div>
+                              
+                              <button class="btn btn-danger" onclick="hapus_akun(${noKK})">Hapus</button>
+                            </div>
+                          </div>`
+                          $('#cards-box').prepend(temp_html)
+                          a++
+                        }
+                    }
+                    let countWarga = `<p align="right" style="margin-bottom: 15px;">Total Kartu Keluarga : ${a}</p>`
+                      $('#mycard').prepend(countWarga)
+                }
+            })
+          }
+          function getRT4(){
+            $('#cards-box').empty()
+            $('#mycard').empty()
+              $.ajax({
+                  type: 'GET',
+                  url: '/api/kk',
+                  data: {},
+                  success: function (response) {  
+                    a = 0
+                      let rows = response['kartu_keluarga']
+                      for (let i = 0; i < rows.length; i++) {
+                          let kepala = rows[i]['kepala']
+                          let noKK = rows[i]['nomorKK']
+                          let rw = rows[i]['rw']
+                          let rt = rows[i]['rt']
+                          if({{rw}}== rw && rt == '4'){
+                            let temp_html = `
+                            <div class="col" >
+                              <div class="card h-100" style="width:1";">
+                                <div class="card-body" onclick="window.location.href = '/tambah-anggota/${rt}-${kepala}-${noKK}'">
+                                  <p>Kartu Keluarga</p>
+                                  <h5  align="center"class="card-title">${kepala}</h5>
+                                  <p align="center" class="card-text">${noKK}</p>
+                                </div>
+                                
+                              <button class="btn btn-danger" onclick="hapus_akun(${noKK})">Hapus</button>
+                              </div>
+                            </div>`
+                            $('#cards-box').prepend(temp_html)
+                            a++
+                            
+                          }
+                      }
+                      let countWarga = `<p align="right" style="margin-bottom: 15px;">Total Kartu Keluarga : ${a}</p>`
+                      $('#mycard').prepend(countWarga)
+                  }
+              })
+            }
+            function getRT5(){
+              $('#cards-box').empty()
+              $('#mycard').empty()
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/kk',
+                    data: {},
+                    success: function (response) {  
+                      a = 0
+                        let rows = response['kartu_keluarga']
+                        for (let i = 0; i < rows.length; i++) {
+                            let kepala = rows[i]['kepala']
+                            let noKK = rows[i]['nomorKK']
+                            let rw = rows[i]['rw']
+                            let rt = rows[i]['rt']
+                            if({{rw}}== rw && rt == '5'){
+                              let temp_html = `
+                              <div class="col" >
+                                <div class="card h-100" style="width:1";">
+                                  <div class="card-body" onclick="window.location.href = '/tambah-anggota/${rt}-${kepala}-${noKK}'">
+                                    <p>Kartu Keluarga</p>
+                                    <h5  align="center"class="card-title">${kepala}</h5>
+                                    <p align="center" class="card-text">${noKK}</p>
+                                  </div>
+                                  
+                              <button class="btn btn-danger" onclick="hapus_akun(${noKK})">Hapus</button>
+                                </div>
+                              </div>`
+                              $('#cards-box').prepend(temp_html)
+                              a++
+                              
+                            }
+                        }
+                        let countWarga = `<p align="right" style="margin-bottom: 15px;">Total Kartu Keluarga : ${a}</p>`
+                        $('#mycard').prepend(countWarga)
+                    }
+                })
+              }
+    function posting(){
+      let namaKega = $('#namaKega').val()
+      let nomorKK = $('#nomorKK').val()
+      let rt = $('#rt').val()
+      let form_data = new FormData();
+      form_data.append("nama_give", namaKega),
+      form_data.append("nomorKK_give", nomorKK),
+      form_data.append("rt_give", rt),
+      form_data.append("rw_give", {{rw}}),
+      $.ajax({
+        type: 'POST',
+        url: '/api/kk',
+        data: form_data,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            alert(response['msg'])
+            window.location.reload()
+        }
+    });
+    }
+
+    function search(){
+        let get_search = $('#search-box').val()
+        $('#mycard').empty()
+        $('#cards-box').empty()
+        $.ajax({
+            type: 'GET',
+            url: '/api/kk',
+            data: {},
+            success: function (response) {  
+                a = 0
+                let rows = response['kartu_keluarga']
+                for (let i = 0; i < rows.length; i++) {
+                    let kepala = rows[i]['kepala']
+                    let noKK = rows[i]['nomorKK']
+                    let rw = rows[i]['rw']
+                    let rt = rows[i]['rt']
+                    if({{rw}}== rw && noKK == get_search){
+                        let temp_html = `<div class="col" onclick="window.location.href = '/tambah-anggota/${rt}-${kepala}-${noKK}'">
+                        <div class="card h-100" style="width:1";">
+                          <div class="card-body">
+                            <p>Kartu Keluarga</p>
+                            <h5  align="center"class="card-title">${kepala}</h5>
+                            <p align="center" class="card-text">${noKK}</p>
+                          </div>
+                        </div>
+                      </div>`
+                        $('#cards-box').prepend(temp_html)
+                        a++
+                    }
+                }
+                let countWarga = `<a class="btn btn-success" onclick="window.location.href='/input/tambah'" style="margin-bottom: 15px;">OK</a>`
+                $('#mycard').prepend(countWarga)
+            }
+        })
+    }
+    
+    function hapus_akun(noKK){
+        $.ajax({
+            type: "POST",
+            url: '/delete/kk',
+            data: {noKK_give : noKK},
+            success : function(response){
+                alert(response['msg'])
+                window.location.reload()
+            }
+        })
+      }
+  </script>
+</head>
+
+<body>
+
+  <!-- ***** Preloader Start ***** -->
+  <div id="js-preloader" class="js-preloader">
+    <div class="preloader-inner">
+      <span class="dot"></span>
+      <div class="dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+  <!-- ***** Preloader End ***** -->
+
+  <!-- ***** Header Area Start ***** -->
+  <header class="header-area header-sticky">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="main-nav">
+            <!-- ***** Logo Start ***** -->
+            <a href="index.html" class="lambang"></a>
+            <!-- ***** Logo End ***** -->
+            <!-- ***** Menu Start ***** -->
+            <ul class="nav">
+              <li><a href="/" class="active">Beranda</a></li>
+              <li><a href="reservation.html">Tentang</a></li>
+              <li><a href="about.html">Wilayah</a></li>
+              <li><a href="/login">Log Out</a></li>
+
+            </ul>
+            <a class='menu-trigger'>
+              <span>Menu</span>
+            </a>
+            <!-- ***** Menu End ***** -->
+          </nav>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- ***** Header Area End ***** -->
+
+
+  <div class="reservation-form">
+    <div class="container">
+      <div class="row">
+
+        <div class="col-lg-12">
+          <form id="reservation-form" name="gs" method="submit" role="search" action="#">
+            <div class="row">
+              <div class="col-lg-12">
+                <h4>Formulir Pengisian <em>Data</em> Warga <em>RW {{rw}}</em></h4>
+              </div>
+              <div class="form-floating mb-3">
+                <p>Kepala Keluarga</p>
+                <input id="namaKega" type="text" class="form-control" placeholder="Nama Anda">
+              </div>
+              <div class="form-floating mb-3">
+                <p>Nomor Kartu Keluarga</p>
+                <input id="nomorKK" type="text" class="form-control" placeholder="Nomor KK Anda">
+              </div>
+              <div class="form-floating mb-3">
+                <p>Rukun Tetangga</p>
+                <input id="rt" type="text" class="form-control" placeholder="RT anda">
+              </div>
+              <div class="mybtns">
+                <button onclick="posting()" type="button" class="btn btn-dark">Save</button>
+                <a onclick="window.location.href='/'" type="button" class="btn btn-danger">Kembali</a>
+
+              </div>
+            </div>
+          </form>
+          <div class="anybutton col-lg-12">
+            <div class="mybtns" style="width: 100%;">
+              <button class="btn btn-warning" style="width: 85%;" onclick="listing()">RW {{rw}}</button>
+            </div>
+          </div>
+          <div class="anybutton col-lg-12" id="button-rt">
+            
+          </div>
+          
+          <div class="mycards">
+            <div id="mycard">
+              <p align="right" style="margin-bottom: 15px;">Total Kartu Keluarga : </p>
+              <input type="text">
+            </div>
+            <div class="mycards">
+              <div class="row row-cols-1 row-cols-md-4 g-4" id="cards-box" >
+
+                <div class="card" style="width: 18rem;">
+                  <div class="card-body">
+                    <p>Kartu Keluarga</p>
+                    <h5  align="center"class="card-title">Mawardi Sinurat</h5>
+                    <p align="center" class="card-text">14711234521</p>
+                  </div>
+                </div>
+  
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <p>Copyright © 2023 <a href="#">Shopware</a>. All rights reserved.
+            <br>Call : <a href="letak ig nanti" target="_blank" title="free CSS templates">Salman Ananda M.S</a> to Make
+            Your Website</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Scripts -->
+  <!-- Bootstrap core JavaScript -->
+
+  <script src="../static/js/isotope.min.js"></script>
+  <script src="../static/js/owl-carousel.js"></script>
+  <!-- <script src="../static/js/wow.js"></script>  -->
+  <script src="../static/js/tabs.js"></script>
+  <script src="../static/js/popup.js"></script>
+  <script src="../static/js/custom.js"></script>
+
+  <script>
+    $(".option").click(function () {
+      $(".option").removeClass("active");
+      $(this).addClass("active");
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <title>Data Warga | Limbungan</title>
+    <!-- Bootstrap core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="../static/css/fontawesome.css">
+  <link rel="stylesheet" href="../static/css/templatemo-woox-travel.css">
+  <link rel="stylesheet" href="../static/css/owl.css">
+  <link rel="stylesheet" href="../static/css/animate.css">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+  <link rel="icon" href="../static/images/logo-pekanbaru.png">
+
+    <style>
+        .container {
+            width: 100%;
+            height: auto;
+            flex-wrap: wrap;
+        }
+
+        .lambang {
+            background-image: url("../static/images/logo-pekanbaru.png");
+            background-position: center;
+            background-size: 100px;
+            width: 50px;
+            height: 60px;
+            margin-top: 5px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left-side {
+            background-image: url('../static/images/login-body.svg');
+            background-size: cover;
+            background-position: center;
+            height: 850px auto;
+        }
+
+        .login-page {
+            padding: 50px;
+            background-color: #9DC08B;
+            border-radius: 50px;
+            width: 600px auto;
+        }
+
+        .login-page>.input-group>label {
+            margin-bottom: 5px auto;
+            font-weight: 500;
+            font-size: large;
+            color: #515151;
+        }
+
+        .login-page>a {
+            height: 40px;
+            margin-left: auto;
+            margin-right: 20px;
+            margin-top: 30px;
+            border-radius: 15px;
+        }
+
+        .login-footer {
+            background-color: #9DC08B;
+            margin: auto;
+            height: 300px;
+            /* width: 400px; */
+            border-radius: 50px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.5)), url('../static/images/logo-pekanbaru.png');
+            background-size: 400px auto;
+            background-position: center;
+        }
+
+        .login-footer>.image-footer {
+
+            /* width: 300px; */
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media screen and (min-width: 450px) and (max-width: 576px) {
+            .left-side {
+                display: none;
+                width: 30%;
+            }
+            .login-page {
+                padding: 50px;
+                background-color: #9DC08B;
+                border-radius: 50px;
+                width: 400px;
+                justify-content: center;
+                align-items: center;
+            }
+            .login-footer{
+                padding: 50px;
+                background-color: #9DC08B;
+                border-radius: 50px;
+                width: 400px;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            list();
+        });
+
+        function list() {
+            $('#slide').empty()
+            $('#footer-banner').empty()
+            $.ajax({
+                type: 'GET',
+                url: '/akun',
+                data: {},
+                success: function (response) {
+                    let acc = response['akun'];
+
+                    for (let i = 0; i < 4; i++) {
+                        let ketua = acc[i]['nick']
+                        var g = acc[i]['username'];
+                        let get = g.split("n")[2]
+                        var rwUP = get.toUpperCase()
+                        let getluas = acc[i]['wilayah']
+                        var number_string = getluas.toString(),
+                            sisa = number_string.length % 3,
+                            rupiah = number_string.substr(0, sisa),
+                            ribuan = number_string.substr(sisa).match(/\d{3}/g);
+
+                        if (ribuan) {
+                            separator = sisa ? '.' : '';
+                            rupiah += separator + ribuan.join('.');
+                        }
+                        if (rwUP == 'RW1') {
+                            x = {{rw1}};
+                        } else if (rwUP == 'RW2') {
+                            x = {{rw2}};
+                        } else if (rwUP == 'RW3') {
+                            x = {{rw3}};
+                        } else if (rwUP == 'RW4') {
+                            x = {{rw4}};
+                        } else if (rwUP == 'RW5') {
+                            x = {{rw5}}
+                        } else if (rwUP == 'RW6') {
+                            x = {{rw6}}
+                        } else if (rwUP == 'RW7') {
+                            x = {{rw7}}
+                        } else if (rwUP == 'RW8') {
+                            x = {{rw8}}
+                        } else if (rwUP == 'RW9') {
+                            x = {{rw9}}
+                        } else if (rwUP == 'RW10') {
+                            x = {{rw10}};
+                        } else if (rwUP == 'RW11') {
+                            x = {{rw11}};
+                        } else if (rwUP == 'RW12') {
+                            x = {{rw12}};
+                        }
+                        let numb = (i + 1).toString()
+                        let temp_html =
+                            `<div id="top-banner-${numb}" class="banner">
+                  <div class="banner-inner-wrapper header-text">
+                    <div class="main-caption" id="caption">
+                      <h2>Rukun Warga Dengan Populasi Terbanyak:</h2>
+                      <h1>${rwUP}</h1>
+                      <!-- <div class="border-button"><a href="">Go There</a></div> -->
+                    </div>
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="more-info">
+                            <div class="row">
+                              <div class="col-lg-3 col-sm-6 col-6">
+                                <i class="fa fa-user"></i>
+                                <h4><span>Population:</span><br>${x} JIWA</h4>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 col-6">
+                                <i class="fa fa-globe"></i>
+                                <h4><span>Territory:</span><br>${rupiah} KM<em>2</em></h4>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 col-6">
+                                <i class="fa fa-home"></i>
+                                <h4><span>Ketua Rukun Warga:</span><br>${ketua}</h4>
+                              </div>
+                              <div class="col-lg-3 col-sm-6 col-6">
+                                <div class="main-button">
+                                  <!-- <a href="about.html">Explore More</a> -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>`
+                        let temp_footer =
+                            `<label for="banner${numb}"><span class="progressbar"><span class="progressbar-fill"></span></span><span class="text">${i+1}</span></label>
+                `
+                        $('#slide').append(temp_html);
+                        $('#footer-banner').append(temp_footer);
+                    }
+                }
+            })
+        }
+
+        function sign_in() {
+            let username = $("#input-username").val();
+            let password = $("#input-password").val();
+            if (username === "") {
+                $("#help-id-login").text("Please input your id.");
+                $("#input-username").focus();
+                return;
+            } else {
+                $("#help-id-login").text("");
+            }
+
+            if (password === "") {
+                $("#help-password-login").text("Please input your password.");
+                $("#input-password").focus();
+                return;
+            } else {
+                $("#help-password-login").text("");
+            }
+
+            console.log(username, password);
+            $.ajax({
+                type: "POST",
+                url: "/sign_in",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                },
+                success: function (response) {
+                    if (response["result"] === "success") {
+                        $.cookie("mytoken", response["token"], {
+                            path: "/"
+                        });
+                        window.location.replace("/");
+                    } else {
+                        alert(response["msg"]);
+                    }
+                },
+            });
+        }
+
+        function is_nickname(asValue) {
+            var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
+            return regExp.test(asValue);
+        }
+
+        function is_password(asValue) {
+            var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
+            return regExp.test(asValue);
+        }
+
+        function clearInputs() {
+            $("#input-username").val("");
+            $("#input-password").val("");
+        }
+
+        function pertukaran() {
+            $('#confirm-password').show()
+            $('#btn-login').hide()
+            $('#btn-regis').hide()
+            $('#btn-sign').show()
+
+        }
+
+        function sign_up() {
+            let username = $("#input-username").val();
+            let password = $("#input-password").val();
+            let password2 = $("#input-password2").val();
+            console.log(username, password, password2);
+            console.log($("#help-id").attr("class"));
+
+            if ($("#help-id").hasClass("is-danger")) {
+                alert("Please check your id");
+                return;
+            } else if (!$("#help-id").hasClass("is-success")) {
+                alert("Please double check your id");
+                return;
+            }
+
+            if (password === "") {
+                $("#help-password")
+                    .text("Please enter your password")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-password").focus();
+                return;
+            } else if (!is_password(password)) {
+                $("#help-password")
+                    .text(
+                        "Please check your password. For your password, please enter 8-20 English characters, numbers, or the following special characters (!@#$%^&*)"
+                    )
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-password").focus();
+                return;
+            } else {
+                $("#help-password")
+                    .text("This password can be used!")
+                    .removeClass("is-danger")
+                    .addClass("is-success");
+            }
+            if (password2 === "") {
+                $("#help-password2")
+                    .text("Please enter your password")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-password2").focus();
+                return;
+            } else if (password2 !== password) {
+                $("#help-password2")
+                    .text("Your passwords do not match")
+                    .removeClass("is-safe")
+                    .addClass("is-danger");
+                $("#input-password2").focus();
+                return;
+            } else {
+                $("#help-password2")
+                    .text("Your passwords match!!!")
+                    .removeClass("is-danger")
+                    .addClass("is-success");
+            }
+            $.ajax({
+                type: "POST",
+                url: "/sign_up/save",
+                data: {
+                    username_give: username,
+                    password_give: password,
+                },
+                success: function (response) {
+                    alert("Your are signed up! Nice!");
+                    window.location.replace("/login");
+                },
+            });
+        }
+        function menu_trigger() {
+          var elem = document.getElementById("menu_trigger");
+          let nav = document.getElementById("navbar")
+          if(elem.className == "menu-trigger"){
+            elem.classList.add("active");
+            nav.style.display = "block"
+          }
+          else {
+            elem.classList.replace("active", "menu-trigger")
+            nav.style.display = "None"
+          }
+        };
+    </script>
+</head>
+
+<body>
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="#" class="lambang">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav" id="navbar">
+                            <li><a href="#" class="active">Beranda</a></li>
+                            <li><a href="#">Tentang</a></li>
+                            <li><a href="#">Wilayah</a></li>
+                            <li><a href="/login">Log Out</a></li>
+
+                        </ul>
+                        <a class='menu-trigger' id="menu_trigger" onclick="menu_trigger()">
+                          <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+    <!-- ***** Main Banner Area Start ***** -->
+    <section id="section-1">
+        <div class="content-slider">
+            <input type="radio" id="banner1" class="sec-1-input" name="banner" checked>
+            <input type="radio" id="banner2" class="sec-1-input" name="banner">
+            <input type="radio" id="banner3" class="sec-1-input" name="banner">
+            <input type="radio" id="banner4" class="sec-1-input" name="banner">
+            <div class="slider" id="slide">
+
+            </div>
+            <nav>
+                <div class="controls" id="footer-banner">
+                    <!--  -->
+                </div>
+            </nav>
+        </div>
+    </section>
+    <!-- ***** Main Banner Area End ***** -->
+
+    <div class="visit-country">
+        <div class="row">
+            <div class="left-side col-6">
+
+            </div>
+            <div class="right-side col-6">
+                <div class="">
+                    <div class="section-heading mt-2">
+                        <form action="sign_in()" method="post" id="form-login">
+                            <div class="login-page row m-5">
+                                <h1 class="mb-4"><center>Sign In</center></h1>
+                                <div class="input-group mb-3 row">
+                                    <label for="" id="label-user">Username Anda</label>
+                                    <input type="text" class="form-control" id="input-username"
+                                        placeholder="Masukkan Username Anda" aria-label="Username"
+                                        aria-describedby="basic-addon1">
+                                    <p style="color:red" id="help-id-login" class="help is-danger"></p>
+                                    <br>
+                                </div>
+
+                                <div class="input-group mb-3 row">
+                                    <label for="" id="label-password">Password Anda</label>
+                                    <input type="password" class="form-control" id="input-password"
+                                        placeholder="Masukkan Password Anda" aria-label="Username"
+                                        aria-describedby="basic-addon1">
+                                    <p style="color:red" id="help-password-login" class="help is-danger"></p>
+                                </div>
+                                <!-- REGISTRASI -->
+                                <div class="input-group mb-3 row" id="confirm-password" style="display:none">
+                                    <label for="" id="label-password">Confirm Password</label>
+                                    <input type="password" class="form-control" id="input-password2"
+                                        placeholder="Masukkan Password Anda" aria-label="Username"
+                                        aria-describedby="basic-addon1">
+                                    <p style="color:red" id="help-password-login" class="help is-danger"></p>
+                                </div>
+                                <button type="button" id="btn-login" class="btn btn-success" onclick="sign_in()">Login</button>
+                            </div>
+                        </form>
+                        <div class="login-footer m-5">
+                            <div class="image-footer col-8">
+                                <h4 style="color: white">Siap Melayani Untuk Negeri</h4>
+                            </div>
+                            <div class="col-4">
+                                <h1 style="color:white">. . .<br> <span style="text-align: justify;"> . .</span></h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright © 2023 <a href="#">Shopware</a>. All rights reserved.
+                        <br>Call : <a href="letak ig nanti" target="_blank" title="free CSS templates">Salman Ananda
+                            M.S</a> to Make
+                        Your Website</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="../static/js/owl-carousel.js"></script>
+    <script src="../static/js/tabs.js"></script>
+    <script src="../static/js/popup.js"></script>
+    <script src="../static/js/custom.js"></script>
+
+    <script>
+        function bannerSwitcher() {
+            next = $('.sec-1-input').filter(':checked').next('.sec-1-input');
+            if (next.length) next.prop('checked', true);
+            else $('.sec-1-input').first().prop('checked', true);
+        }
+
+        var bannerTimer = setInterval(bannerSwitcher, 5000);
+
+        $('nav .controls label').click(function () {
+            clearInterval(bannerTimer);
+            bannerTimer = setInterval(bannerSwitcher, 5000)
+        });
+        $(".option").click(function () {
+          $(".option").removeClass("active");
+          $(this).addClass("active");
+        });
+    </script>
+
+</body>
+
+</html>

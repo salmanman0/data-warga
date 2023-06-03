@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <title>Tambah Warga | Limbungan</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="../static/images/logo-pekanbaru.png">
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" href="../static/css/fontawesome.css">
+    <link rel="stylesheet" href="../static/css/templatemo-woox-travel.css">
+    <link rel="stylesheet" href="../static/css/owl.css">
+    <link rel="stylesheet" href="../static/css/animate.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <!--
+
+TemplateMo 580 Woox Travel
+
+https://templatemo.com/tm-580-woox-travel
+
+-->
+    <style>
+        .mycards {
+            margin: 20px auto 0px auto;
+            width: 95%;
+            max-width: 1200px;
+        }
+
+        .lambang {
+            background-image: url("../static/images/logo-pekanbaru.png");
+            background-position: center;
+            background-size: 100px;
+            width: 50px;
+            height: 60px;
+            margin-top: 5px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mycards {
+            margin: 20px auto 0px auto;
+            width: 95%;
+            max-width: 1200px;
+        }
+
+        .mybtns {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0px;
+        }
+
+        .mybtns>button {
+            margin-right: 10px;
+        }
+
+        .anybutton {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            height: 30px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .anybutton>button {
+            margin-left: 50px;
+            width: 150px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            start();
+        });
+        function start() {
+            $.ajax({
+                type: "GET",
+                url: "/warga",
+                data: {},
+                success: function (response) {
+                    let data = response['warga']
+                    for (let i = 0; i < data.length; i++) {
+                        var nik = data[i]['nik']
+                        if (nik == {{nik}}) {
+                            var nama = data[i]['nama'];
+                            let tgl_lahir = data[i]['tgl_lahir'];
+                            let tmpt_lahir = data[i]['tmpt_lahir']
+                            var jk = data[i]['jk']
+                            let agama = data[i]['agama']
+                            let pendidikan = data[i]['pendidikan']
+                            let pekerjaan = data[i]['pekerjaan']
+                            let goldar = data[i]['golDarah']
+                            var rt = data[i]['rt']
+
+                            let temp_html =
+                            `<form id="reservation-form" name="gs" method="submit" role="search" action="#">
+                                <div class="row">
+                                  <div class="col-lg-12">
+                                    <h4>Data <em>${nama}</em></h4>
+                                  </div>
+                                  <div id="${nik}">
+                                    <div class="form-floating mb-3">
+                                      <p>Nama Anggota</p>
+                                      <input id="nama" type="text" class="form-control" placeholder="" value="${nama}">
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                      <p>Nomor Induk Kependudukan</p>
+                                      <input id="nik" type="text" class="form-control" placeholder="" value="${nik}">
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                      <p>Tanggal Lahir</p>
+                                      <input id="ttl" type="date" class="form-control" placeholder="" value="${tgl_lahir}">
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                      <p>Tempat Lahir</p>
+                                      <input id="tempatLahir" type="text" class="form-control" placeholder="" value="${tmpt_lahir}">
+                                    </div>
+                                    <div class="input-group mb-3">
+                                      <p class="" for="inputGroupSelect01">Jenis Kelamin</p>
+                                      <select class="form-select" id="jk">
+                                        <option selected value="">-- Jenis Kelamin --</option>
+                                        <option value="Laki-Laki">Laki-Laki</option>
+                                        <option value="Perempuan">Perempuan</option>
+                                        
+                                      </select>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                      <p>Agama</p>
+                                      <input id="agama" type="text" class="form-control" placeholder="" value="${agama}">
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                      <p>Pendidikan Terakhir</p>
+                                      <input id="pendidikan" type="text" class="form-control" placeholder="" value="${pendidikan}">
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                      <p>Jenis Pekerjaan</p>
+                                      <input id="jenisPekerjaan" type="text" class="form-control" placeholder="" value="${pekerjaan}">
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                      <p>Golongan Darah</p>
+                                      <input id="golDarah" type="text" class="form-control" placeholder="" value="${goldar}">
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <p>Rukun Tetangga</p>
+                                        <input id="rt" type="text" class="form-control" placeholder="" value="${rt}">
+                                    </div>
+                                    <div class="mybtns">
+                                      <button onclick="edit()"type="button" class="btn btn-dark">Save</button>
+                                    </div>
+                                  </div>
+                                  </div>
+                                </form>`
+                                $('#form-data').append(temp_html)
+                        }
+                    }
+                }
+            })
+        }
+        function edit() {
+            let nama  = $("#nama").val()
+            let nik = $('#nik').val()
+            let ttl = $('#ttl').val()
+            let tempatLahir = $('#tempatLahir').val()
+            let jk = $('#jk').val()
+            let agama = $('#agama').val()
+            let pendidikan = $('#pendidikan').val()
+            let jenisPekerjaan = $('#jenisPekerjaan').val()
+            let golDarah = $('#golDarah').val()
+            let rt = $('#rt').val()
+            if (nama == ""){
+                alert("Masukkan Nama Anda")
+            }
+            else if (nik == ""){
+                alert("Masukkan NIK Anda")
+            }
+            else if (ttl == ""){
+                alert("Masukkan Tanggal Lahir Anda")
+            }
+            else if (tempatLahir == ""){
+                alert("Masukkan Tempat Lahir Anda")
+            }
+            else if (jk == ""){
+                alert("Masukkan Jenis Kelamin Anda")
+            }
+            else if (agama == ""){
+                alert("Masukkan Agama Anda")
+            }
+            else if (pendidikan == ""){
+                alert("Masukkan Pendidikan Anda")
+            }
+            else if (jenisPekerjaan == ""){
+                alert("Masukkan Pekerjaan Anda")
+            }
+            else if (golDarah == ""){
+                alert("Masukkan Golongan Darah Anda")
+            }
+            else {
+                $.ajax({
+                    type: 'POST',
+                    url: '/edit-anggota',
+                    data: {
+                    nama_give: nama,
+                    nik_give: nik,
+                    ttl_give: ttl,
+                    tLahir_give: tempatLahir,
+                    jk_give: jk,
+                    agama_give: agama, 
+                    pendidikan_give: pendidikan, 
+                    jenisPekerjaan_give: jenisPekerjaan, 
+                    golDarah_give: golDarah,
+                    rt_give: rt, 
+                    },
+                    success: function(response){
+                    alert('Data Berhasil Diperbaharui')
+                    }
+                });
+            }            
+        }
+    </script>
+
+<body>
+
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="index.html" class="lambang">
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li><a href="/" class="active">Beranda</a></li>
+                            <li><a href="reservation.html">Tentang</a></li>
+                            <li><a href="about.html">Wilayah</a></li>
+                            <li><a href="/login">Log Out</a></li>
+
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+
+    <div class="reservation-form">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12" id="form-data">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright © 2023 <a href="#">Shopware</a>. All rights reserved.
+                        <br>Call : <a href="letak ig nanti" target="_blank" title="free CSS templates">Salman Ananda
+                            M.S</a> to Make
+                        Your Website</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../static/vendor/bootstrap/js/bootstrap.min.js"></script>
+  
+    <script src="../static/js/isotope.min.js"></script>
+    <script src="../static/js/owl-carousel.js"></script>
+    <!-- <script src="../static/js/wow.js"></script>  -->
+    <script src="../static/js/tabs.js"></script>
+    <script src="../static/js/popup.js"></script>
+    <script src="../static/js/custom.js"></script>
+
+    <script>
+        $(".option").click(function () {
+            $(".option").removeClass("active");
+            $(this).addClass("active");
+        });
+    </script>
+
+
+</body>
+
+</html>
